@@ -1,0 +1,18 @@
+(rule
+ (deps _build/default/bin/cpop.bc.js)
+ (alias deploy)
+ (action (progn
+  (echo "** deploy starts\n")
+  (run sh -c "git branch -D gh-pages || true")
+  (run git checkout -b gh-pages)
+  (run cp -rf ../../static/img ../../)
+  (run cp -f ../../static/index.html ../../)
+  (run cp -f ../../static/style.css ../../)
+  (run cp -f ./bin/cpop.bc.js ../../)
+  (echo "** add changes\n")
+  (run git add ../../*)
+  (run git commit -m "deploy")
+  (echo "** push to gh-pages\n")
+  (run git push --force deploy gh-pages)
+  (run git checkout master)
+  (echo "** deploy succeeded\n"))))

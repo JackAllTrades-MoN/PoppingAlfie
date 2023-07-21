@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "dune build; webpack build",
+    "build": "webpack build",
     "start": "npm run build && webpack-dev-server",
     "deploy": "npm run build && ./deploy.sh"
   },
@@ -14,6 +14,8 @@
   "devDependencies": {
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "webpack-shell-plugin": "^0.5.0",
+    "webpack-shell-plugin-next": "^2.3.1"
   }
 }

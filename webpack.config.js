@@ -1,3 +1,5 @@
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
+
 module.exports = {
     mode: "development",
     entry: __dirname + "/_build/default/bin/cpop.bc.js",
@@ -13,8 +15,19 @@ module.exports = {
             constants: false,
         }
     },
+    plugins: [
+        new WebpackShellPluginNext({
+          onBuildStart: {
+            scripts: ['dune build'],
+            blocking: true,
+            parallel: false,
+          },
+          onBuildEnd: {}
+        })
+    ],
     module: {},
     devServer: {
+        hot: true,
         open: true,
         static: [
             { directory: __dirname },

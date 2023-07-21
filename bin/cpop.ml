@@ -19,6 +19,7 @@ let load name k =
   img##.onload := Dom_html.handler (fun _ -> k img; Js._false)
 
 let start _ =
+  Dirty.hide_address_bar ();
   match Dom_html.getElementById_coerce "canvas-main" Dom_html.CoerceTo.canvas with
     | None -> fail "Fatal error: Canvas did not exist."
     | Some canvas ->

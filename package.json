@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "dune build; webpack-dev-server",
     "build": "dune build; webpack build",
-    "deploy": "dune build; webpack build && ./deploy.sh"
+    "start": "npm run build && webpack-dev-server",
+    "deploy": "npm run build && ./deploy.sh"
   },
   "author": "",
   "license": "ISC",

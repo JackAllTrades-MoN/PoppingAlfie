@@ -8,6 +8,7 @@ git checkout -b gh-pages
 cp -rf ./static/* ./
 echo "** add changes\n"
 git add ./* || true
+git add -f ./dist || true
 git commit -m "deploy"
 echo "** push to gh-pages\n"
 git push --force deploy gh-pages

@@ -51,16 +51,18 @@ let start _ =
           ctx##fillText (Js.string (Printf.sprintf "Score: %d" !score)) 20. 20.
         in
         let jump_strength = ref 0 in
+        let touch_margin = 2 in
+        let maximum_level = 6 in
         let release_jump () =
           alfie := Alfie.stop !alfie;
-          for _ = 0 to !jump_strength do
+          for _ = 0 to !jump_strength / touch_margin do
             alfie := Alfie.accelerate !alfie
           done;
           jump_strength := 0
         in
         let update () =
           if !jump_strength > 0 then begin
-            if !jump_strength <= 4 then jump_strength := !jump_strength + 1
+            if !jump_strength < touch_margin * maximum_level - 1 then jump_strength := !jump_strength + 1
             else release_jump ()
           end;
           scene := List.map (fun (x, y, sprite) -> (x -. 1., y, sprite)) !scene;
@@ -80,7 +82,7 @@ let start _ =
         Dom_html.addEventListener canvas (Dom_html.Event.touchend) (Dom_html.handler (fun _ ->
           if !jump_strength > 0 then
             begin
-              print_endline @@ Printf.sprintf "touch_end: Jump level=%d" !jump_strength;
+              print_endline @@ Printf.sprintf "touch_end: Jump level=%d" (!jump_strength / touch_margin);
               release_jump ()
             end;
           Js._false

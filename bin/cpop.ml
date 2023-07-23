@@ -50,13 +50,19 @@ let start _ =
           ctx##.font := Js.string "48px serif";
           ctx##fillText (Js.string (Printf.sprintf "Score: %d" !score)) 20. 20.
         in
-        let touch_count = ref 0 in
+        let jump_strength = ref 0 in
+        let release_jump () =
+          alfie := Alfie.stop !alfie;
+          for _ = 0 to !jump_strength do
+            alfie := Alfie.accelerate !alfie
+          done;
+          jump_strength := 0
+        in
         let update () =
-          if !touch_count > 0 && !touch_count <= 4 then
-            begin
-              touch_count := !touch_count + 1;
-              alfie := Alfie.accelerate !alfie
-            end;
+          if !jump_strength > 0 then begin
+            if !jump_strength <= 4 then jump_strength := !jump_strength + 1
+            else release_jump ()
+          end;
           scene := List.map (fun (x, y, sprite) -> (x -. 1., y, sprite)) !scene;
           scene := List.filter (fun (x, _, _) -> x >= (Float.of_int (-cw))) !scene;
           if List.length !scene <= 1 then scene := !scene @ [(Float.of_int cw, 0., bg_sprite)];
@@ -67,11 +73,16 @@ let start _ =
           render ()
         end in
         Dom_html.addEventListener canvas (Dom_html.Event.touchstart) (Dom_html.handler (fun _ ->
-          if Alfie.is_on_the_ground !alfie then touch_count := 1;
+          print_endline "touch_start";
+          if Alfie.is_on_the_ground !alfie then jump_strength := 1;
           Js._false
         )) Js._false |> ignore;
         Dom_html.addEventListener canvas (Dom_html.Event.touchend) (Dom_html.handler (fun _ ->
-          touch_count := 0;
+          if !jump_strength > 0 then
+            begin
+              print_endline @@ Printf.sprintf "touch_end: Jump level=%d" !jump_strength;
+              release_jump ()
+            end;
           Js._false
         )) Js._false |> ignore;
         Dom_html.window##setInterval (Js.wrap_callback frame) 100. |> ignore

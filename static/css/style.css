@@ -5,10 +5,10 @@
     }
     main {
         background-color: black;
-        width: 100vw;
+        width: 100dvw;
     }
     canvas {
-        width: 100vw;
+        width: 100dvw;
         height: 100dvh;
     }
 }

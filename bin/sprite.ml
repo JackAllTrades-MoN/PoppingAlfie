@@ -18,3 +18,5 @@ let render_full ctx (sprite: t) x y w h =
   ctx##drawImage_full sprite.img sx sy sw sh x y w h
 
 let size_of (sprite: t) = sprite.frames.(sprite.idx) |> snd
+
+let update_idx idx (sprite: t) = {sprite with idx = idx}

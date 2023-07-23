@@ -16,7 +16,7 @@ let create sprite = {
 }
 
 let is_on_the_ground (alfie: t) = alfie.position = 0.
-let accelerate (alfie: t) = {alfie with velocity = alfie.velocity +. 5.}
+let accelerate (alfie: t) = {alfie with velocity = alfie.velocity +. 20.}
 
 let render _canvas_width canvas_height (alfie: t) ctx () =
   let ch = Float.of_int canvas_height in

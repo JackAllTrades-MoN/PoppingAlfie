@@ -52,7 +52,7 @@ let start _ =
         in
         let touch_count = ref 0 in
         let update () =
-          if !touch_count > 0 && !touch_count <= 10 then
+          if !touch_count > 0 && !touch_count <= 4 then
             begin
               touch_count := !touch_count + 1;
               alfie := Alfie.accelerate !alfie

@@ -1,5 +1,5 @@
 /*@media screen and (max-width:480px) {*/
-@media screen and (orientation: landscape) {
+/*@media screen and (orientation: landscape) { */
     body {
         margin: 0;
     }
@@ -8,7 +8,8 @@
         width: 100dvw;
     }
     canvas {
-        width: 100dvw;
+        margin-left: 1dvw;
+        width: 98dvw;
         height: 100dvh;
     }
-}
+/*}*/

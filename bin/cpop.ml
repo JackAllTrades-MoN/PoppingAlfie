@@ -85,7 +85,7 @@ let start _ =
             end;
           Js._false
         )) Js._false |> ignore;
-        Dom_html.window##setInterval (Js.wrap_callback frame) 100. |> ignore
+        Dom_html.window##setInterval (Js.wrap_callback frame) 15. |> ignore
       ));
       Js._false
 

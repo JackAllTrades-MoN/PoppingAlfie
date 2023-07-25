@@ -22,11 +22,10 @@ let stop (alfie: t) = {alfie with velocity = 0.}
 let render _canvas_width canvas_height (alfie: t) ctx () =
   let ch = Float.of_int canvas_height in
   let sprite = alfie.sprite in
-  let scale = 200. in
+  let h = ch /. 6. in
   let aw, ah = Sprite.size_of sprite in
-  let a = ah /. aw in
-  let w = scale in
-  let h = a *. w in
+  let a = aw /. ah in
+  let w = a *. h in
   let x = 30. in
   let y = ch -. h -. alfie.position in
   Sprite.render_full ctx sprite x y w h

@@ -1,15 +1,28 @@
-/*@media screen and (max-width:480px) {*/
-/*@media screen and (orientation: landscape) { */
-    body {
-        margin: 0;
-    }
+
+body {
+    margin: 0px;
+}
+
+@media screen and (orientation: portrait) {
     main {
-        background-color: black;
-        width: 100dvw;
+        display: flex;
+        height: 100dvh;
+        justify-content: center;
+        flex-direction: column;
     }
     canvas {
-        margin-left: 1dvw;
-        width: 98dvw;
+        width: 100dvw;
+        height: calc(100dvw * 6 / 8);
+    }
+}
+
+@media screen and (orientation: landscape) {
+    main {
+        display: flex;
+        justify-content: center;
+    }
+    canvas {
+        width: calc(100dvh * 8 / 6);
         height: 100dvh;
     }
-/*}*/
+}

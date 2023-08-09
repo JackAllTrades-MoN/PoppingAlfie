@@ -1,14 +1,16 @@
 
 type t = {
-  score: int;
+  jump_level: int;
   velocity: float;
   position: float;
   sprite: Sprite.t;
   cnt: int;
 }
 
+let maximum_level = 6
+
 let create sprite = {
-  score=0;
+  jump_level=0;
   velocity=0.;
   position=0.;
   sprite=sprite;
@@ -17,10 +19,19 @@ let create sprite = {
 
 let is_on_the_ground (alfie: t) = alfie.position = 0.
 let accelerate (alfie: t) = {alfie with velocity = alfie.velocity +. 15.}
+
+let start_jump (alfie: t) = {alfie with jump_level = 1} |> accelerate
+let end_jump (alfie: t) = {alfie with jump_level = 0}
+let jump_higher (alfie: t) =
+  if 0 < alfie.jump_level && alfie.jump_level < maximum_level
+  then {alfie with jump_level = alfie.jump_level + 1} |> accelerate
+  else end_jump alfie
+
 let stop (alfie: t) = {alfie with velocity = 0.}
 
-let render _canvas_width canvas_height (alfie: t) ctx () =
-  let ch = Float.of_int canvas_height in
+let render ctx (alfie: t) =
+  let _, ch = Global.canvas_size in
+  let ch = Float.of_int ch in
   let sprite = alfie.sprite in
   let h = ch /. 6. in
   let aw, ah = Sprite.size_of sprite in

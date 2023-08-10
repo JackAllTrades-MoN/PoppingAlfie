@@ -1,13 +1,19 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap" rel="stylesheet">
         <link href="./css/style.css" rel="stylesheet">
-        <script type="text/javascript" src="./dist/bundle.js"></script>
+        <script type="text/javascript" src="./js/main.bc.js"></script>
+        <title>Poping Alfie</title>
     </head>
     <body>
+        <audio loop autoplay src="./audio/hinatabokko.mp3" id="bgm"></audio>
         <div id="system-message"></div>
         <main>
-            <canvas id="canvas-main" width="800" height="600"></canvas>
+            <canvas id="canvas-main"></canvas>
         </main>
     </body>
 </html>

@@ -1,7 +1,61 @@
 open Js_of_ocaml
 
-let state: Game.t option ref = ref None
+let sprites = Hashtbl.create 2
 
+let get_scene =
+  let scene: (module Scene.SceneType) option ref = ref None in
+  fun () ->
+    let open Scene in
+    let next = !next_scene
+    |> Option.map (function
+    | Title -> (module Title.Make (): Scene.SceneType)
+    | Popping -> (module Popping.Make ())
+    | GameOver -> (module Gameover.Make ())) in
+    if Option.is_some next then begin
+      scene := next;
+      next_scene := None
+    end;
+    Option.get !scene
+
+let update () =
+  let module M = (val get_scene (): Scene.SceneType) in
+  M.update ()
+
+let render () =
+  let module M = (val get_scene (): Scene.SceneType) in
+  let ctx = Global.context () in
+  let cw, ch = Global.canvas_size in
+  ctx##clearRect 0. 0. (float_of_int cw) (float_of_int ch);
+  M.render sprites
+
+let frame _ = update (); render ()
+
+let start _ =
+  let canvas = Global.canvas () in
+  let w, h = Global.canvas_size in
+  canvas##.width := w;
+  canvas##.height := h;
+  Dom_html.addEventListener canvas (Dom_html.Event.touchstart) (Dom_html.handler (fun e ->
+    let module M = (val get_scene (): Scene.SceneType) in
+    M.on_touch_start e;
+    Js._false
+  )) Js._false |> ignore;
+  Dom_html.addEventListener canvas (Dom_html.Event.touchend) (Dom_html.handler (fun e ->
+    let module M = (val get_scene (): Scene.SceneType) in
+    M.on_touch_end e;
+    Js._false
+  )) Js._false |> ignore;
+  Sprite.load "./img/bg.jpg" ~frames: [|((0., 0.), (1018., 600.))|] (fun background ->
+  Sprite.load "./img/wcc.png" ~frames: [|((0., 0.), (436., 304.)); ((483., 0.), (583., 354.))|] (fun alfie ->
+    Hashtbl.add sprites "alfie" alfie;
+    Hashtbl.add sprites "background" background;
+    ignore @@ Dom_html.window##setInterval (Js.wrap_callback frame) 15.
+  ));
+  Js._false
+
+let () = Dom_html.window##.onload := Dom_html.handler start
+
+(*
 let update () =
   state := Option.map (fun state ->
     let alfie = Alfie.update Game.(state.alfie |> Alfie.jump_higher) in
@@ -30,6 +84,7 @@ let start _ =
   canvas##.width := w;
   canvas##.height := h;
   Dom_html.addEventListener canvas (Dom_html.Event.touchstart) (Dom_html.handler (fun _ ->
+    let _ = Js.Unsafe.js_expr "document.getElementById('bgm').play()" in
     state := !state |> Option.map (fun state ->
       print_endline "touch_start";
       let alfie = Game.(state.alfie) in
@@ -187,4 +242,4 @@ let start _ =
 
 let () = Dom_html.window##.onload := Dom_html.handler start
 
-*)
+*)*)

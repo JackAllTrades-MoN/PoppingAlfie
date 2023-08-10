@@ -5,30 +5,29 @@ type size = float * float
 
 type t = {
   img: Dom_html.imageElement Js.t;
-  frames: (pos * size) Array.t;
-  idx: int;
+  frames: (pos * size) Array.t
 }
 
-let load path ?(idx=0) ?(frames=[||]) k =
+let load path ?(frames=[||]) k =
   let img = Dom_html.createImg Dom_html.document in
   img##.src := Js.string path;
   img##.onload := Dom_html.handler (fun _ ->
-    let sprites = {img; frames; idx} in
+    let sprites = {img; frames} in
     k sprites;
     Js._false
   )
 
-let size_of (sprite: t) = sprite.frames.(sprite.idx) |> snd
+let size_of ?(idx=0) (sprite: t) = sprite.frames.(idx) |> snd
 
-let render ctx (sprite: t) x y =
-  let (sx, sy), (sw, sh) = sprite.frames.(sprite.idx) in
+let render ?(idx=0) (sprite: t) x y =
+  let ctx = Global.context () in
+  let (sx, sy), (sw, sh) = sprite.frames.(idx) in
   ctx##drawImage_full sprite.img sx sy sw sh x y sw sh
 
-let render_full ctx (sprite: t) x y w h =
-  let (sx, sy), (sw, sh) = sprite.frames.(sprite.idx) in
+let render_full ?(idx=0) (sprite: t) x y w h =
+  let ctx = Global.context () in
+  let (sx, sy), (sw, sh) = sprite.frames.(idx) in
   ctx##drawImage_full sprite.img sx sy sw sh x y w h
-
-let update_idx idx (sprite: t) = {sprite with idx}
 
 (*
 

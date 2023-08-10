@@ -7,7 +7,10 @@ type t = {
   h: float;
 }
 
-let create x y = {x; y; w=100.; h=10.}
+let gen () =
+  let x = 800. in
+  let y = 150. +. Random.float 300. in
+  {x; y; w=100.; h=10.}
 
 let render _sprite (t: t) =
   let ctx = Global.context () in
@@ -21,3 +24,7 @@ let render _sprite (t: t) =
 let update (t: t) = {t with x = t.x -. 1.}
 
 let is_staled (t: t) = t.x +. t.w < 0.
+
+let is_hit x y (t: t) =
+  t.x <= x && x <= t.x +. t.w
+  && t.y <= y && y <= t.y +. t.h

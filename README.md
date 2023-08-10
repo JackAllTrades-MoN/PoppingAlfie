@@ -6,12 +6,8 @@
 
 
 ```bash
-# build
-npm run build
-# try on local dev-server
-npm start
-# deploy
-npm run deploy
+reload -b # start a dev server (with hot-reload)
+./build.sh
 ```
 
 # 背景素材

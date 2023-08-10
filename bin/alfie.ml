@@ -29,6 +29,8 @@ let str_of (alfie: t) =
   let mode = str_of_mode alfie.mode in
   Printf.sprintf "{mode=%s, velocity=%f, y_position=%f}" mode alfie.velocity alfie.y_position
 
+let feet_at (alfie: t) = (30., alfie.y_position)
+
 let is_on_the_ground (alfie: t) = alfie.y_position = 0.
 
 let sprite_index_of (alfie: t) =

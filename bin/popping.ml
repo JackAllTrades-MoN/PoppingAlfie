@@ -6,10 +6,13 @@ module Make(): SceneType = struct
   let score = ref 0
   let alfie = ref Alfie.init
   let bg = ref Background.init
+  let floors = ref [Floor.create 800. 150.; Floor.create 900. 250.; Floor.create 1000. 400.]
 
   let update () =
     alfie := Alfie.update !alfie;
-    bg := Background.update !bg
+    bg := Background.update !bg;
+    floors := List.filter (fun floor -> not Floor.(is_staled floor)) !floors;
+    floors := List.map (fun floor -> Floor.update floor) !floors
 
   let render_score () =
     let ctx = Global.context () in
@@ -23,27 +26,13 @@ module Make(): SceneType = struct
   let render sprites =
     Background.render sprites !bg;
     Alfie.render sprites !alfie;
+    List.iter (fun floor -> Floor.render sprites floor) !floors;
     render_score ()
 
   let on_touch_start _ =
     alfie := Alfie.start_jump !alfie
-(*
-  state := !state |> Option.map (fun state ->
-      print_endline "touch_start";
-      let alfie = Game.(state.alfie) in
-      let alfie =
-        if Alfie.is_on_the_ground alfie
-        then Alfie.start_jump alfie
-        else alfie
-      in
-      {state with alfie}
-    );*)
+
   let on_touch_end _ =
     alfie := Alfie.stop_jump !alfie
-    (*
-    state := !state |> Option.map (fun state ->
-      let alfie = Game.(state.alfie) |> Alfie.end_jump in
-      {state with alfie}
-    );
-    Js._false *)
+
 end
